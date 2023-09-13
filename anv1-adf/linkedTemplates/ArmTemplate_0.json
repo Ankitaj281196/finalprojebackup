@@ -1,0 +1,742 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "anv1-adf"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureBlobout_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobout'"
+		},
+		"AzureDataLakeStorage1_fol_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1_fol'"
+		},
+		"BlobStorageinput_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BlobStorageinput'"
+		},
+		"blobstorages_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'blobstorages'"
+		},
+		"SqlServerlink1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerlink1'"
+		},
+		"SqlServers1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServers1'"
+		},
+		"AzureDataLakeStorage1_fol_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://batch11sacc.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobout')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobout_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1_fol')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_fol_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_fol_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobStorageinput')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('BlobStorageinput_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/blobstorages')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('blobstorages_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime2')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "output"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Unit",
+						"type": "String"
+					},
+					{
+						"name": "first",
+						"type": "String"
+					},
+					{
+						"name": "name last",
+						"type": "String"
+					},
+					{
+						"name": "Lease status",
+						"type": "String"
+					},
+					{
+						"name": "Lease Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Lease End Date",
+						"type": "String"
+					},
+					{
+						"name": "Move-in Date",
+						"type": "String"
+					},
+					{
+						"name": "Contact-level Status",
+						"type": "String"
+					},
+					{
+						"name": "Relationship (Household Status)",
+						"type": "String"
+					},
+					{
+						"name": "Household Name",
+						"type": "String"
+					},
+					{
+						"name": "Age",
+						"type": "String"
+					},
+					{
+						"name": "Citizenship",
+						"type": "String"
+					},
+					{
+						"name": "Gender",
+						"type": "String"
+					},
+					{
+						"name": "Marital Status",
+						"type": "String"
+					},
+					{
+						"name": "Cell Phone",
+						"type": "String"
+					},
+					{
+						"name": "Work Phone",
+						"type": "String"
+					},
+					{
+						"name": "E-mail",
+						"type": "String"
+					},
+					{
+						"name": "Current Employment E-mail",
+						"type": "String"
+					},
+					{
+						"name": "Current Employment Estimated Annual Income",
+						"type": "String"
+					},
+					{
+						"name": "Current Employment Job Title",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Allowed Access",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Cell Number",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact E-mail",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Name FIRST",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Name LAST",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Relationship",
+						"type": "String"
+					},
+					{
+						"name": "Guarantor",
+						"type": "String"
+					},
+					{
+						"name": "Lease Signer",
+						"type": "String"
+					},
+					{
+						"name": "Screening Decision",
+						"type": "String"
+					},
+					{
+						"name": "Pet Age",
+						"type": "String"
+					},
+					{
+						"name": "Pet Breed",
+						"type": "String"
+					},
+					{
+						"name": "Pet Color",
+						"type": "String"
+					},
+					{
+						"name": "Pet Gender",
+						"type": "String"
+					},
+					{
+						"name": "Pet Name",
+						"type": "String"
+					},
+					{
+						"name": "Pet Size (in pounds)",
+						"type": "String"
+					},
+					{
+						"name": "Pet Type",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Color",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle License Plate",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle License State",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Make",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Model",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Model Year",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Type",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "final_output",
+						"container": "final"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/folderpath_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1_fol",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"folder_path": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@dataset().folder_path",
+							"type": "Expression"
+						},
+						"fileSystem": "final"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Unit",
+						"type": "String"
+					},
+					{
+						"name": "first",
+						"type": "String"
+					},
+					{
+						"name": "name last",
+						"type": "String"
+					},
+					{
+						"name": "Lease status",
+						"type": "String"
+					},
+					{
+						"name": "Lease Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Lease End Date",
+						"type": "String"
+					},
+					{
+						"name": "Move-in Date",
+						"type": "String"
+					},
+					{
+						"name": "Contact-level Status",
+						"type": "String"
+					},
+					{
+						"name": "Relationship (Household Status)",
+						"type": "String"
+					},
+					{
+						"name": "Household Name",
+						"type": "String"
+					},
+					{
+						"name": "Age",
+						"type": "String"
+					},
+					{
+						"name": "Citizenship",
+						"type": "String"
+					},
+					{
+						"name": "Gender",
+						"type": "String"
+					},
+					{
+						"name": "Marital Status",
+						"type": "String"
+					},
+					{
+						"name": "Cell Phone",
+						"type": "String"
+					},
+					{
+						"name": "Work Phone",
+						"type": "String"
+					},
+					{
+						"name": "E-mail",
+						"type": "String"
+					},
+					{
+						"name": "Current Employment E-mail",
+						"type": "String"
+					},
+					{
+						"name": "Current Employment Estimated Annual Income",
+						"type": "String"
+					},
+					{
+						"name": "Current Employment Job Title",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Allowed Access",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Cell Number",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact E-mail",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Name FIRST",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Name LAST",
+						"type": "String"
+					},
+					{
+						"name": "Emergency Contact Relationship",
+						"type": "String"
+					},
+					{
+						"name": "Guarantor",
+						"type": "String"
+					},
+					{
+						"name": "Lease Signer",
+						"type": "String"
+					},
+					{
+						"name": "Screening Decision",
+						"type": "String"
+					},
+					{
+						"name": "Pet Age",
+						"type": "String"
+					},
+					{
+						"name": "Pet Breed",
+						"type": "String"
+					},
+					{
+						"name": "Pet Color",
+						"type": "String"
+					},
+					{
+						"name": "Pet Gender",
+						"type": "String"
+					},
+					{
+						"name": "Pet Name",
+						"type": "String"
+					},
+					{
+						"name": "Pet Size (in pounds)",
+						"type": "String"
+					},
+					{
+						"name": "Pet Type",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Color",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle License Plate",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle License State",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Make",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Model",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Model Year",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Type",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1_fol')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerlink1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServerlink1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime2",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServers1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServers1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime2",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata1').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DelimitedText1",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "folderpath_ds",
+											"type": "DatasetReference",
+											"parameters": {
+												"folder_path": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-09-08T05:01:22Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/folderpath_ds')]"
+			]
+		}
+	]
+}

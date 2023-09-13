@@ -1,0 +1,98 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "anv1-adf"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureBlobout_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobout'"
+		},
+		"AzureDataLakeStorage1_fol_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1_fol'"
+		},
+		"BlobStorageinput_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BlobStorageinput'"
+		},
+		"SqlServerlink1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerlink1'"
+		},
+		"SqlServers1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServers1'"
+		},
+		"blobstorages_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'blobstorages'"
+		},
+		"AzureDataLakeStorage1_fol_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://batch11sacc.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "anv1-adf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureBlobout_connectionString": {
+						"value": "[parameters('AzureBlobout_connectionString')]"
+					},
+					"AzureDataLakeStorage1_fol_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_fol_accountKey')]"
+					},
+					"BlobStorageinput_connectionString": {
+						"value": "[parameters('BlobStorageinput_connectionString')]"
+					},
+					"blobstorages_connectionString": {
+						"value": "[parameters('blobstorages_connectionString')]"
+					},
+					"SqlServerlink1_connectionString": {
+						"value": "[parameters('SqlServerlink1_connectionString')]"
+					},
+					"SqlServers1_connectionString": {
+						"value": "[parameters('SqlServers1_connectionString')]"
+					},
+					"AzureDataLakeStorage1_fol_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_fol_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

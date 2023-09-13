@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "anv1-adf"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureBlobout_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_fol_accountKey": {
+			"value": ""
+		},
+		"BlobStorageinput_connectionString": {
+			"value": ""
+		},
+		"SqlServerlink1_connectionString": {
+			"value": ""
+		},
+		"SqlServers1_connectionString": {
+			"value": ""
+		},
+		"blobstorages_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_fol_properties_typeProperties_url": {
+			"value": "https://batch11sacc.dfs.core.windows.net/"
+		}
+	}
+}
